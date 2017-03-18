@@ -7,24 +7,17 @@ namespace Metadata\Driver;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class AbstractFileDriver implements AdvancedDriverInterface
+abstract class AbstractFileDriver extends AbstractDriver implements AdvancedDriverInterface
 {
     /**
      * @var FileLocatorInterface|FileLocator
      */
     private $locator;
 
-    /**
-     * Default meta data
-     *
-     * @var array
-     */
-    private $defaults;
-
     public function __construct(FileLocatorInterface $locator, array $defaults = [])
     {
+        parent::__construct($defaults);
         $this->locator = $locator;
-        $this->defaults = $defaults;
     }
 
     public function loadMetadataForClass(\ReflectionClass $class)
@@ -46,20 +39,6 @@ abstract class AbstractFileDriver implements AdvancedDriverInterface
         }
 
         return $this->locator->findAllClasses($this->getExtension());
-    }
-
-    /**
-     * Get a default metadata option.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function getDefaultMetadata($key)
-    {
-        if (array_key_exists($key, $this->defaults)) {
-            return $this->defaults[$key];
-        }
     }
 
     /**
